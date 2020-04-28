@@ -66,7 +66,7 @@
 
 Apriori-like candidate set generation-and-test approach is based on the \textit{anti-monotone Apriori heuristic: if any length k patterns is not frequent in the database, its length $k + 1$ super-pattern can never be frequent.} The essential idea is to iteratively generate the set of candidates patterns of length $k+1$ from the set of frequent-patterns of length $k$ (for $k \geq 1$), and check their corresponding ocurrence frequencies in the database.
 
-The \textit{Apriori} heuristic achieves good performance gained by (possibly \\ significantly) reducing the size of candidate sets. However, in situations with a large number of frequent patterns, long patterns, or quite low minimum support thresholds, an \textit{Apriori}-like algorithm may suffer from the following: it is costly to handle a huge number of candidate sets. For example, if there are $10^4$ frequent 1-itemsets, the \textit{Apriori} algorithm will need to generate more than $10^7$ length-2 candidates and accumulate and test their occurrence frequences. Moreover, to discover a frequent pattern of size $100$, such as $\{ a_1, \cdots , a_{100}\}$, it must generate $2^{100-2} \approx 10^{30}$ candidates in total.
+The \textit{Apriori} heuristic achieves good performance gained by (possibly \\ significantly) reducing the size of candidate sets. However, in situations with a large number of frequent patterns, long patterns, or quite low minimum support thresholds, an \textit{Apriori}-like algorithm may suffer from the following: it is costly to handle a huge number of candidate sets. For example, if there are $10^4$ frequent 1-itemsets, the \textit{Apriori} algorithm will need to generate more than $10^7$ length-2 candidates and accumulate and test their occurrence frequences. Moreover, to discover a frequent pattern of size $100$, such as $\{ a_1, \ldots , a_{100}\}$, it must generate $2^{100-2} \approx 10^{30}$ candidates in total.
 
 \textit{Mining Frequent Patterns without Candidate Generation: A Frequent-Pattern Tree Approach} \cite{han2000} proposes a novel frequent-pattern tree (FP-tree) structure, which is an extended prefix-tree structure for storing compressed, crucial information about frequent patterns, and develops an efficient FP-tree-based mining method, \textit{FP-growth}, for mining \textit{the complet set of frequent-patterns} by pattern fragment growth.
 
@@ -91,7 +91,7 @@ Efficiency of mining is achieved with three techniques: (1) a large database is 
 
 Analysis.\quad The FP-tree construction takes exactly two scans of the transaction database: The first scan collets the set of frequent items, and the second scan constructs the FP-tree. The cost of inserting a transaction $T$ into the FP-tree is $\mathcal{O}(freq(T))$, where $freq(T)$ is the set of frequent items in $T$.
 
-The following \textit{lemmas} are necessary to proof that an \textit{FP-tree} is a compact and efficient data structure and encodes the same information as the original database i.e. it is sufficient scanning the \textit{FP-tree} to find the complete set of frequent itemsets of the database DB.
+The following \textit{lemmas} are necessary to proof that an \textit{FP-tree} is a compact and efficient data structure and encodes the same information as the original database i.e.\ it is sufficient scanning the \textit{FP-tree} to find the complete set of frequent itemsets of the database DB.
 
 \begin{lemma}
   Given a transaction database DB and a support threshold $\xi$, the complete set of frequent item projections of transactions in the database can be derived from DB's FP-tree.
@@ -109,9 +109,9 @@ This section describes how to explore the comptact information stored in the \te
   (Pattern growth). \quad Let $\alpha$ be a frequent itemset in DB, B be $\alpha$'s conditional pattern-base, and $\beta$ be an itemset in B. Then $\alpha \cup \beta$ is frequent in DB if and only if $\beta$ is frequent in B.
 \end{corollary}
 
-Collorary \ref{cor:pattern-growth} is derived from an extensive chain of properties, proofs and examples that are present in the original paper which I recommend reading.
+Collorary~\ref{cor:pattern-growth} is derived from an extensive chain of properties, proofs and examples that are present in the original paper which I recommend reading.
 
-Collorary \ref{cor:pattern-growth} states that mining can be performed by first identifying the set of frequent 1-itemsets in DB, and then for each frequent 1-itemset, constructing its conditional pattern-bases, and mining its set of frequent 1-itemsets in the conditional pattern-base, and so on. This indicates that the process of mining frequent patterns can be viewed as first mining frequent 1-itemset and then progressively growing each itemset by mining its conditional pattern-base, which can in turn be done similarly. By doing so, a frequent $k$-itemset mining problem is successfully transformed into a sequence of $k$ frequent 1-itemset mining problems via a set of conditional pattern-bases. Since mining is done by \textit{pattern growth}, there is no need to generate any candidate sets in the entire mining process.
+Collorary~\ref{cor:pattern-growth} states that mining can be performed by first identifying the set of frequent 1-itemsets in DB, and then for each frequent 1-itemset, constructing its conditional pattern-bases, and mining its set of frequent 1-itemsets in the conditional pattern-base, and so on. This indicates that the process of mining frequent patterns can be viewed as first mining frequent 1-itemset and then progressively growing each itemset by mining its conditional pattern-base, which can in turn be done similarly. By doing so, a frequent $k$-itemset mining problem is successfully transformed into a sequence of $k$ frequent 1-itemset mining problems via a set of conditional pattern-bases. Since mining is done by \textit{pattern growth}, there is no need to generate any candidate sets in the entire mining process.
 
 \begin{algorithm}[H]
   \SetKwInOut{Input}{Input}
@@ -123,25 +123,25 @@ Collorary \ref{cor:pattern-growth} states that mining can be performed by first 
   \BlankLine
 
   Procedure FP-growth($Tree$, $alpha$) \\
-  \{ \\
+  \{\\
     \If{$Tree$ contains a single prefix path}{
       let $P$ be the single prefix-path part of $Tree$\\
       let $Q$ be the multipath part with the top branching node replaced by a \textit{null} root\\
       \ForEach{combination(denoted as $\beta$) of the nodes in the path $P$}{
         generate pattern $\beta \cup \alpha$ with $support$ = \textit{minimum support of nodes in $\beta$}
       }
-      let \code{freq\_pattern\_set(P)} be the set of patterns so generated
+      let freq\_pattern\_set(P) be the set of patterns so generated
     }
     \Else{let $Q$ be $Tree$}
     \ForEach{item $a_i$ in $Q$}{
       generate pattern $\beta = a_i \cup \alpha$ with support = $a_i . support$\\
-      construct \beta 's conditional pattern-base and then \beta 's conditional FP-tree $Tree_{\beta}$\\
+      construct $\beta$'s conditional pattern-base and then $\beta$'s conditional FP-tree $Tree_{\beta}$\\
       \If{$Tree = \emptyset$}{
-        call \code{FP-growth($Tree_{\beta}$, $\beta$)} \\
+        call FP-growth($Tree_{\beta}$, $\beta$)
       }
-      let \code{freq\_pattern\_set(Q)} be the set of patterns so generated
+      let freq\_pattern\_set(Q) be the set of patterns so generated
     }
-    return \code{freq\_pattern\_set(P)} $\cup$ \code{freq\_pattern\_set(Q)} $\cup$ (\code{freq\_pattern\_set(P)} $\times$  \code{freq\_pattern\_set(Q)}) \\
+    return freq\_pattern\_set(P) $\cup$ freq\_pattern\_set(Q) $\cup$ (freq\_pattern\_set(P) $\times$  freq\_pattern\_set(Q))\\
   \}
   \caption{FP-growth: Mining frequent patterns with \textit{FP-tree} by pattern fragment growth.}
   \label{scol}
@@ -153,7 +153,7 @@ This algorithm is proven to be enough to find the complete set of frequent items
 
 \textit{FP-growth} is compared with the classical frequent pattern mining algorithm \textit{Apriori}, and an alternative database projection-based algorithm, \textit{TreeProjection}. The experiments are pursued on both synthetic and real data sets.
 
-The first experiment (figure \ref{fig:compactness}) is to test the compactness of \textit{FP-trees}. They compared the sizes of the following structures.
+The first experiment (figure~\ref{fig:compactness}) is to test the compactness of \textit{FP-trees}. They compared the sizes of the following structures.
 
 \begin{itemize}
   \item \code{Alphabetical FP-tree}. It includes the space of all the links. However, in such an FP-tree,the alphabetical order of items are used instead of frequency descending order.
@@ -171,7 +171,7 @@ The first experiment (figure \ref{fig:compactness}) is to test the compactness o
 
 \newpage
 
-The runtime of \textit{Apriori}, \textit{TreeProjection}, and \textit{FP-growth} on synthetic data set \code{T10.I4.D100K} as the support threshold decreases from $0.15\%$ to $0.01\%$ is shown in figure \ref{fig:runtime}. \textit{FP-growth} is faster than both \textit{Apriori} and \textit{TreProjection}.
+The runtime of \textit{Apriori}, \textit{TreeProjection}, and \textit{FP-growth} on synthetic data set \code{T10.I4.D100K} as the support threshold decreases from $0.15\%$ to $0.01\%$ is shown in figure~\ref{fig:runtime}. \textit{FP-growth} is faster than both \textit{Apriori} and \textit{TreProjection}.
 
 \begin{figure}[H]
   \includegraphics[scale=0.5]{fp-tree-runtime}
