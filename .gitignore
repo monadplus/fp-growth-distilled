@@ -4,6 +4,7 @@
 *.bbl
 *.blg
 *.pdf
+!report.pdf
 *.glo
 *.ist
 *.lof
